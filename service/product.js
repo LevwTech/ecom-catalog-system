@@ -79,12 +79,19 @@ class ProductService {
       const cachedProducts = await redis.get(cacheKey);
       if (cachedProducts) {
         console.log('Products retrieved from cache');
-        return JSON.parse(cachedProducts);
+        const { products, totalCount } = JSON.parse(cachedProducts);
+        return { products, totalCount };
       }
+      
       const skip = (pageNumber - 1) * pageSize;
-      const products = await Product.find({}, GET_PRODUCTS_FIELDS).skip(skip).limit(pageSize);
-      await redis.set(cacheKey, JSON.stringify(products), 'EX', CACHE_DURATION);
-      return products;
+      const [products, totalCount] = await Promise.all([
+        Product.find({}, GET_PRODUCTS_FIELDS).skip(skip).limit(pageSize),
+        Product.countDocuments({})
+      ]);
+      
+      await redis.set(cacheKey, JSON.stringify({ products, totalCount }), 'EX', CACHE_DURATION);
+      
+      return { products, totalCount };
     } catch (error) {
       console.error('Error getting products:', error);
       throw error;

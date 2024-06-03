@@ -59,8 +59,21 @@ class ProductController {
       let { pageNumber = DEFAULT_PAGE_NUMBER, pageSize = DEFAULT_PAGE_SIZE } = req.query;
       pageNumber = parseInt(pageNumber);
       pageSize = parseInt(pageSize);
-      const products = await ProductService.getProducts(pageNumber, pageSize);
-      res.json(products);
+      
+      const { products, totalCount } = await ProductService.getProducts(pageNumber, pageSize);
+      
+      const totalPages = Math.ceil(totalCount / pageSize);
+      const nextPageExists = pageNumber < totalPages;
+      const previousPageExists = pageNumber > 1;
+  
+      res.json({
+        products,
+        pageNumber,
+        pageSize,
+        totalPages,
+        nextPageExists,
+        previousPageExists
+      });
     } catch (error) {
       console.error('Error getting products:', error);
       res.status(500).json({ error: 'Internal server error' });
