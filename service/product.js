@@ -1,4 +1,4 @@
-const Product = require('../model/Product');
+const Product = require('../model/product');
 const redis = require('../config/redis');
 const { getProductCacheKey, getProductsCacheKey, invalidateProductCache, deleteProductsCache } = require('../utils/cache');
 const { GET_PRODUCTS_FIELDS, CACHE_DURATION } = require('../config/constants');
