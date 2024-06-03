@@ -27,7 +27,7 @@ This Node.js API serves as the backend for an e-commerce catalog system. It prov
 To run the API locally, follow these steps:
 
 1. Clone the repository.
-2. Create a `vars.env` file in the `config` directory and add the necessary environment variables. You can refer to the `sample.env` file for guidance.
+2. Create a `vars.env` file in the root directory and add the necessary environment variables. You can refer to the `sample.env` file for guidance.
 3. Install dependencies by running `npm install`.
 4. Start the server in development mode by running `npm run dev`.
 
