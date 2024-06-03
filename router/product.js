@@ -3,7 +3,7 @@ const router = express.Router();
 
 const ProductController = require('../controller/product');
 
-const { upload } = require('../utils/uploadImage');
+const { upload } = require('../utils/imageService');
 
 router.post('/products', upload.array("images"), ProductController.createProduct);
 router.get('/products', ProductController.getProducts);

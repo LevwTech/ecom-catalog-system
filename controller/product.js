@@ -1,5 +1,5 @@
 const ProductService = require('../service/product');
-const { getImageUrl } = require('../utils/uploadImage');
+const { getImageUrl } = require('../utils/imageService');
 const { DEFAULT_PAGE_SIZE, DEFAULT_PAGE_NUMBER } = require('../config/constants');
 
 class ProductController {

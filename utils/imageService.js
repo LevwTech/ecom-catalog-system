@@ -1,4 +1,4 @@
-const { S3Client } = require("@aws-sdk/client-s3");
+const { S3Client, DeleteObjectCommand } = require("@aws-sdk/client-s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
 
@@ -37,4 +37,20 @@ const upload = multer({
 
 const getImageUrl = (key) => `https://${bucketName}.s3.amazonaws.com/${key}`;
 
-module.exports = { upload, getImageUrl};
+const deleteImages = async (imageUrls) => {
+  imageUrls.forEach(async (url) => {
+      try {
+          const key = url.substring(url.lastIndexOf("/") + 1)
+          const deleteParams = {
+            Bucket: bucketName,
+            Key: key
+          };
+          await s3.send(new DeleteObjectCommand(deleteParams));
+          console.log("Images deleted successfully");
+        } catch (error) {
+          console.error("Error deleting images:", error);
+        }
+  });
+};
+
+module.exports = { upload, getImageUrl, deleteImages };

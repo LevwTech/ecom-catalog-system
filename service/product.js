@@ -2,7 +2,7 @@ const Product = require('../model/product');
 const redis = require('../config/redis');
 const { getProductCacheKey, getProductsCacheKey, invalidateProductCache, deleteProductsCache } = require('../utils/cache');
 const { GET_PRODUCTS_FIELDS, CACHE_DURATION } = require('../config/constants');
-
+import { deleteImages } from '../utils/imageService';
 class ProductService {
   static async createProduct(productData) {
     try {
@@ -63,8 +63,9 @@ class ProductService {
         console.log('Product not found');
         return null;
       }
-      console.log('Product deleted successfully:', product);
+      await deleteImages(product.images);
       await invalidateProductCache(cacheKey);
+      console.log('Product deleted successfully:', product);
       return product;
     } catch (error) {
       console.error('Error deleting product:', error);
