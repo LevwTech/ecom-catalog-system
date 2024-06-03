@@ -1,7 +1,7 @@
 const Product = require('../model/product');
 const redis = require('../config/redis');
 const { getProductCacheKey, getProductsCacheKey, invalidateProductCache, deleteProductsCache } = require('../utils/cache');
-const { GET_PRODUCTS_FIELDS, CACHE_DURATION } = require('../config/constants');
+const { GET_PRODUCTS_FIELDS, CACHE_DURATION, MAX_SEARCH_RESULTS } = require('../config/constants');
 const { deleteImages } = require('../utils/imageService');
 class ProductService {
   static async createProduct(productData) {
@@ -100,7 +100,8 @@ class ProductService {
 
   static async searchProducts(searchQuery) {
     try {
-      const products = await Product.find({ $text: { $search: searchQuery } });
+      const regex = new RegExp(searchQuery, 'i');
+      const products = await Product.find({ name: { $regex: regex } }).limit(MAX_SEARCH_RESULTS);
       return products;
     } catch (error) {
       console.error('Error searching products:', error);
