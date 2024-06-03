@@ -2,7 +2,7 @@ const Product = require('../model/product');
 const redis = require('../config/redis');
 const { getProductCacheKey, getProductsCacheKey, invalidateProductCache, deleteProductsCache } = require('../utils/cache');
 const { GET_PRODUCTS_FIELDS, CACHE_DURATION } = require('../config/constants');
-import { deleteImages } from '../utils/imageService';
+const { deleteImages } = require('../utils/imageService');
 class ProductService {
   static async createProduct(productData) {
     try {
