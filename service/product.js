@@ -85,7 +85,7 @@ class ProductService {
       
       const skip = (pageNumber - 1) * pageSize;
       const [products, totalCount] = await Promise.all([
-        Product.find({}, GET_PRODUCTS_FIELDS).skip(skip).limit(pageSize),
+        Product.find({}, GET_PRODUCTS_FIELDS).skip(skip).limit(pageSize).sort({ createdAt: -1 }),
         Product.countDocuments({})
       ]);
       
